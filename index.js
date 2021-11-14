@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 console.log("works")
 
 // # if [-z ${ HC_REF }]; then
