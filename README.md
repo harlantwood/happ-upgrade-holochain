@@ -12,6 +12,9 @@ npx harlantwood/happ-upgrade-holochain 0.0.115
 
 ## Dev
 
+Check out the repository
+
 ```sh
-npm run dev -- 0.0.115
+npm install
+npm run dev -- 0.0.115 dev/example_happ
 ```

@@ -4,13 +4,18 @@ import { join, resolve } from "path"
 import { readFileSync, writeFileSync } from "fs"
 import { run } from './run'
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+console.log({ __dirname })
+
 const args = process.argv.slice(2)
 
 const version = args[0]
 let happ_dir = resolve(args[1] || '.')
 console.log({ version, happ_dir })
-
-run("pwd")
 
 if (!version) {
   console.error("ERROR: Missing holochain version.  Sample usage:")
@@ -63,19 +68,21 @@ default_nix = default_nix.replace(
 console.log(default_nix)
 writeFileSync(join(happ_dir, 'default.nix'), default_nix)
 
+const nixLogPath = join(__dirname, "nix.log")
 
-console.log("➳  Getting cargoSha256... This can take a while...")
-run("nix-shell > nix.log", { relaxed: true, cwd: happ_dir })
+console.log("➳  Getting cargoSha256... This may take a looooooong time...")
+run(`nix-shell &> ${nixLogPath}`, { relaxed: true, cwd: happ_dir })
+// console.log({ nixOutput })
 
 // update - hc - cargoSha:
 
-console.log("➳  Waiting for 5s...")
-await new Promise(resolve => setTimeout(resolve, 5000))
-
 console.log("✔  Replacing cargoSha256...")
 const pattern = /wanted:\s*sha256:000000000000000000000000000000000000000000000000000a\s*got:\s*sha256:(?<cargoSha256>.+?)\b/
-let nix_log = readFileSync(join(happ_dir, 'nix.log'), 'utf8');
+let nix_log = readFileSync(nixLogPath, 'utf8');
 const match = pattern.exec(nix_log)
+console.log({ match })
+console.log({ 'match?.groups': match?.groups })
+console.log({ 'match?.groups?.cargoSha256': match?.groups?.cargoSha256 })
 const cargoSha256 = match?.groups?.cargoSha256
 
 default_nix = readFileSync(join(happ_dir, 'default.nix'), 'utf8');
