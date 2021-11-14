@@ -10,7 +10,7 @@
     "happ-upgrade-holochain": "./index.sh"
   },
   "scripts": {
-    "run": "./index.sh"
+    "dev": "./index.sh"
   },
   "devDependencies": {
     "sort-package-json": "^1.53.1"

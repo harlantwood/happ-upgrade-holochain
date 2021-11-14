@@ -1,0 +1,16 @@
+[package]
+name = "example_happ"
+version = "0.0.1"
+edition = "2018"
+
+[lib]
+name = "example_happ"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+hdk = "0.0.111"
+# holo_hash = "*"
+serde = "1"
+
+[dev-dependencies]
+holochain = { version = "0.0.111", default-features = false, features = ["test_utils"] }
