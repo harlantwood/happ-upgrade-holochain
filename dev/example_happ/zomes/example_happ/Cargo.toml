@@ -8,9 +8,9 @@ name = "example_happ"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-hdk = "0.0.111"
+hdk = "0.0.115"
 # holo_hash = "*"
 serde = "1"
 
 [dev-dependencies]
-holochain = { version = "0.0.111", default-features = false, features = ["test_utils"] }
+holochain = { version = "0.0.115", default-features = false, features = ["test_utils"] }

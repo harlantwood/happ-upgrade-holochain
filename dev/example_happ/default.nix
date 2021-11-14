@@ -10,17 +10,12 @@ let
         holochainBinaries = true;
     };
 
-    rustVersion = {
-      track = "stable";
-      version = "1.55.0";
-    };
-
     holochainVersionId = "custom";
 
     holochainVersion = {
-      rev = "holochain-0.0.114";
-      sha256 = "1r3fxmcnc6576cbq12vyzyjgdjf6754mfsivzplzmj47bwvx3hx1";
-      cargoSha256 = "15d8h3ivr8xdrccxgmpwn5sv4givhvfvvhihdhdgyv1893gpmzl3";
+      rev = "holochain-0.0.115";
+      sha256 = "163fvii27wqpni7f5f0m0nxivjjdgsycb2pnd1jcadx9i9d70ziv";
+      cargoSha256 = "1nmyk14d1v8y3wipjlff7bn38ay7zkp5fkzr7qbgm28kbai4ji3v";
       bins = {
         holochain = "holochain";
         hc = "hc";
@@ -39,6 +34,5 @@ in nixpkgs.mkShell {
   buildInputs = with nixpkgs; [
     binaryen
     nodejs-16_x
-    cargo-watch
   ];
 }
