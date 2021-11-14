@@ -1,5 +1,3 @@
-#!/usr/bin/env ts-node
-
 export { }
 
 import { run } from './run'

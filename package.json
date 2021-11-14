@@ -7,10 +7,10 @@
   "author": "Harlan T Wood",
   "main": "index.js",
   "bin": {
-    "happ-upgrade-holochain": "./index.ts"
+    "happ-upgrade-holochain": "./index.sh"
   },
   "scripts": {
-    "run": " node --loader ts-node/esm --experimental-specifier-resolution=node index.ts"
+    "run": "./index.sh"
   },
   "devDependencies": {
     "sort-package-json": "^1.53.1"
