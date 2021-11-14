@@ -1,16 +1,27 @@
 {
+  "type": "module",
   "name": "happ-upgrade-holochain",
   "version": "0.1.0",
   "description": "",
-  "keywords": [],
   "license": "Apache 2.0",
-  "author": "",
+  "author": "Harlan T Wood",
   "main": "index.js",
   "bin": {
-    "happ-upgrade-holochain": "./index.js"
+    "happ-upgrade-holochain": "./index.ts"
   },
-  "scripts": {},
+  "scripts": {
+    "run": " node --loader ts-node/esm --experimental-specifier-resolution=node index.ts"
+  },
   "devDependencies": {
     "sort-package-json": "^1.53.1"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.7",
+    "chalk": "^4.1.2",
+    "esm": "^3.2.25",
+    "lodash": "^4.17.21",
+    "shelljs": "^0.8.4",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
   }
 }

@@ -1,6 +1,12 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node
 
-console.log("works")
+export { }
+
+import { run } from './run'
+
+console.log("works from ts")
+
+run("pwd")
 
 // # if [-z ${ HC_REF }]; then
 // #   echo "Error: no holochain rev provided: please pass in HC_REF env var (tag or commit on holochain repo)"
