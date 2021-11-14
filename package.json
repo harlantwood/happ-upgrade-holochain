@@ -2,9 +2,15 @@
   "name": "happ-upgrade-holochain",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {},
   "keywords": [],
+  "license": "Apache 2.0",
   "author": "",
-  "license": "Apache 2.0"
+  "main": "index.js",
+  "bin": {
+    "happ-upgrade-holochain": "./index.js"
+  },
+  "scripts": {},
+  "devDependencies": {
+    "sort-package-json": "^1.53.1"
+  }
 }
