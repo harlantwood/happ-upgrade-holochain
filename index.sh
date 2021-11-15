@@ -1,1 +1,1 @@
-node --loader ts-node/esm --experimental-specifier-resolution=node index.ts $*
+/usr/bin/env node --loader ts-node/esm --experimental-specifier-resolution=node index.ts $*

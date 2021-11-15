@@ -7,8 +7,8 @@
   "author": "Harlan T Wood",
   "main": "index.js",
   "bin": {
-    "happ-upgrade-holochain0": "./index.sh",
-    "happ-upgrade-holochain": "/usr/bin/env node --loader ts-node/esm --experimental-specifier-resolution=node index.ts $*"
+    "happ-upgrade-holochain": "./index.sh",
+    "happ-upgrade-holochain1": "/usr/bin/env node --loader ts-node/esm --experimental-specifier-resolution=node index.ts $*"
   },
   "scripts": {
     "dev": "./index.sh",
