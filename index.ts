@@ -1,9 +1,11 @@
 import { join, resolve } from "path"
 import { readFileSync, writeFileSync } from "fs"
-import { run } from './run'
-
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import glob from "glob"
+
+import { run } from './run'
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,10 +34,12 @@ function main() {
   console.log(`⚙️  Updating happ using hdk/holochain version: ${version}`)
   console.log("✔  Updating hdk and holo_hash rev in Cargo.toml...")
 
-  const cargoTomlPath = join(happ_dir, 'zomes/example_happ/Cargo.toml')
-  replace(cargoTomlPath, /^hdk\s*=\s*".+$/m, `hdk = "${crateVersion}"`)
-  replace(cargoTomlPath, /^holochain\s*=\s*".+$/m, `holochain = "${crateVersion}"`)
-  replace(cargoTomlPath, /^(?<pre>holochain\s*=\s*{.*version\s*=\s*)".+?"/m, `$<pre>"${crateVersion}"`)
+  const cargoTomlPaths = glob.sync(join(happ_dir, "**", "Cargo.toml"))
+  for (const cargoTomlPath of cargoTomlPaths) {
+    replace(cargoTomlPath, /^hdk\s*=\s*".+$/m, `hdk = "${crateVersion}"`)
+    replace(cargoTomlPath, /^holochain\s*=\s*".+$/m, `holochain = "${crateVersion}"`)
+    replace(cargoTomlPath, /^(?<pre>holochain\s*=\s*{.*version\s*=\s*)".+?"/m, `$<pre>"${crateVersion}"`)
+  }
 
   console.log("✔  Replacing HC version in default.nix...")
   const defaultNixPath = join(happ_dir, 'default.nix')
@@ -81,10 +85,10 @@ function main() {
   }
 }
 
-function replace(path, target, replacement) {
+function replace(path: string, target: RegExp, replacement: string) {
   const fileText = readFileSync(path, 'utf8');
   const newFileText = fileText.replace(target, replacement)
-  console.log(path)
+  // console.log(path)
   // console.log(newFileText)
   writeFileSync(path, newFileText)
 }
