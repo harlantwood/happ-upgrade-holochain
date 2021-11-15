@@ -41,6 +41,11 @@ function main() {
     replace(cargoTomlPath, /^holochain\s*=\s*".+$/m, `holochain = "${crateVersion}"`)
     replace(
       cargoTomlPath,
+      /^(?<pre>hdk\s*=\s*{.*version\s*=\s*)".+?"/m,
+      `$<pre>"${crateVersion}"`
+    )
+    replace(
+      cargoTomlPath,
       /^(?<pre>holochain\s*=\s*{.*version\s*=\s*)".+?"/m,
       `$<pre>"${crateVersion}"`
     )
