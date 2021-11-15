@@ -9,13 +9,13 @@ import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-console.log({ __dirname })
+// console.log({ __dirname })
 
 const args = process.argv.slice(2)
 
 const version = args[0]
 let happ_dir = resolve(args[1] || '.')
-console.log({ version, happ_dir })
+// console.log({ version, happ_dir })
 
 if (!version) {
   console.error("ERROR: Missing holochain version.  Sample usage:")
@@ -60,7 +60,6 @@ writeFileSync(join(happ_dir, 'default.nix'), default_nix)
 
 console.log("➳  Corrupting cargoSha256...")
 
-// sed - i - e 's/^     cargoSha256 = .*/     cargoSha256 = "000000000000000000000000000000000000000000000000000a";/' default.nix
 default_nix = readFileSync(join(happ_dir, 'default.nix'), 'utf8');
 default_nix = default_nix.replace(
   /(?<pre>holochainVersion\s*=\s*{[^{]*\n\s*cargoSha256\s*=\s*)".+?"/ms,
@@ -68,7 +67,7 @@ default_nix = default_nix.replace(
 console.log(default_nix)
 writeFileSync(join(happ_dir, 'default.nix'), default_nix)
 
-const nixLogPath = join(__dirname, "nix.log")
+const nixLogPath = join(__dirname, "nix.log")  // TODO this should be a tempdir, in case there are multiple runs simultaneously
 
 console.log("➳  Getting cargoSha256... This may take a looooooong time...")
 run(`nix-shell &> ${nixLogPath}`, { relaxed: true, cwd: happ_dir })
@@ -80,14 +79,16 @@ console.log("✔  Replacing cargoSha256...")
 const pattern = /wanted:\s*sha256:000000000000000000000000000000000000000000000000000a\s*got:\s*sha256:(?<cargoSha256>.+?)\b/
 let nix_log = readFileSync(nixLogPath, 'utf8');
 const match = pattern.exec(nix_log)
-console.log({ match })
-console.log({ 'match?.groups': match?.groups })
-console.log({ 'match?.groups?.cargoSha256': match?.groups?.cargoSha256 })
+// console.log({ match })
+// console.log({ 'match?.groups': match?.groups })
+// console.log({ 'match?.groups?.cargoSha256': match?.groups?.cargoSha256 })
 const cargoSha256 = match?.groups?.cargoSha256
 
-default_nix = readFileSync(join(happ_dir, 'default.nix'), 'utf8');
-default_nix = default_nix.replace(
-  /(?<pre>holochainVersion\s*=\s*{[^{]*\n\s*cargoSha256\s*=\s*)".+?"/ms,
-  `$<pre>"${cargoSha256}"`)
-console.log(default_nix)
-writeFileSync(join(happ_dir, 'default.nix'), default_nix)
+if (cargoSha256) {
+  default_nix = readFileSync(join(happ_dir, 'default.nix'), 'utf8');
+  default_nix = default_nix.replace(
+    /(?<pre>holochainVersion\s*=\s*{[^{]*\n\s*cargoSha256\s*=\s*)".+?"/ms,
+    `$<pre>"${cargoSha256}"`)
+  console.log(default_nix)
+  writeFileSync(join(happ_dir, 'default.nix'), default_nix)
+}
