@@ -9,16 +9,7 @@ const { clone, defaults, merge, isEmpty } = lodash
 import shelljs from 'shelljs'
 const { exec, exit } = shelljs
 
-type Options = {
-  color?: boolean
-  cwd?: string
-  relaxed?: boolean
-  quiet?: boolean
-  quietCommand?: boolean
-  quietResponse?: boolean
-}
-
-export function run(command: string, options: Options = {}): string {
+export function run(command, options = {}) {
   const originalOptions = clone(options)
   defaults(options, {
     color: true,

@@ -1,10 +1,12 @@
+#!/usr/bin/env node
+
 import { join, resolve } from 'path'
 import { readFileSync, writeFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 import glob from 'glob'
 
-import { run } from './run'
+import { run } from './run.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -16,8 +18,8 @@ function main() {
   const args = process.argv.slice(2)
 
   const version = args[0]
-  let happ_dir = resolve(args[1] || '.')
-  // console.log({ version, happ_dir })
+  let happDir = resolve(args[1] || '.')
+  // console.log({ version, happDir })
 
   if (!version) {
     console.error('ERROR: Missing holochain version.  Sample usage:')
@@ -33,7 +35,7 @@ function main() {
   console.log(`⚙️  Updating happ using hdk/holochain version: ${version}`)
   console.log('✔  Updating hdk and holo_hash rev in Cargo.toml...')
 
-  const cargoTomlPaths = glob.sync(join(happ_dir, '**', 'Cargo.toml'))
+  const cargoTomlPaths = glob.sync(join(happDir, '**', 'Cargo.toml'))
   for (const cargoTomlPath of cargoTomlPaths) {
     replace(cargoTomlPath, /^hdk\s*=\s*".+$/m, `hdk = "${crateVersion}"`)
     replace(cargoTomlPath, /^holochain\s*=\s*".+$/m, `holochain = "${crateVersion}"`)
@@ -45,7 +47,7 @@ function main() {
   }
 
   console.log('✔  Replacing HC version in default.nix...')
-  const defaultNixPath = join(happ_dir, 'default.nix')
+  const defaultNixPath = join(happDir, 'default.nix')
   replace(
     defaultNixPath,
     /(?<pre>holochainVersion\s*=\s*{\s*rev\s*=\s*)".+?"/m,
@@ -76,19 +78,19 @@ function main() {
   const nixLogPath = join(__dirname, 'nix.log') // TODO this should be a tempdir, in case there are multiple runs simultaneously
 
   console.log('➳  Getting cargoSha256... This may take a looooooong time...')
-  run(`nix-shell &> ${nixLogPath}`, { relaxed: true, cwd: happ_dir })
+  run(`nix-shell &> ${nixLogPath}`, { relaxed: true, cwd: happDir })
 
   // update - hc - cargoSha:
 
   console.log('✔  Replacing cargoSha256...')
   const pattern =
     /wanted:\s*sha256:000000000000000000000000000000000000000000000000000a\s*got:\s*sha256:(?<cargoSha256>.+?)\b/
-  let nix_log = readFileSync(nixLogPath, 'utf8')
-  const match = pattern.exec(nix_log)
+  let nixLog = readFileSync(nixLogPath, 'utf8')
+  const match = pattern.exec(nixLog)
   // console.log({ match })
   // console.log({ 'match?.groups': match?.groups })
   // console.log({ 'match?.groups?.cargoSha256': match?.groups?.cargoSha256 })
-  const cargoSha256 = match?.groups?.cargoSha256
+  const cargoSha256 = match && match.groups && match.groups.cargoSha256
 
   if (cargoSha256) {
     replace(
@@ -99,7 +101,7 @@ function main() {
   }
 }
 
-function replace(path: string, target: RegExp, replacement: string) {
+function replace(path, target, replacement) {
   const fileText = readFileSync(path, 'utf8')
   const newFileText = fileText.replace(target, replacement)
   // console.log(path)
