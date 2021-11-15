@@ -8,7 +8,7 @@
   "main": "index.js",
   "bin": {
     "happ-upgrade-holochain0": "./index.sh",
-    "happ-upgrade-holochain": "node --loader ts-node/esm --experimental-specifier-resolution=node index.ts $*"
+    "happ-upgrade-holochain": "/usr/bin/env node --loader ts-node/esm --experimental-specifier-resolution=node index.ts $*"
   },
   "scripts": {
     "dev": "./index.sh",
