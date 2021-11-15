@@ -11,9 +11,11 @@
   },
   "scripts": {
     "dev": "./index.sh",
-    "format": "prettier --write './**/*.{css,html,js,json,md,scss,yaml}'"
+    "format": "prettier --write './**/*.{css,html,js,json,md,scss,ts,yaml}'",
+    "sort": "sort-package-json"
   },
   "devDependencies": {
+    "prettier": "^2.4.1",
     "sort-package-json": "^1.53.1"
   },
   "dependencies": {
@@ -21,7 +23,6 @@
     "chalk": "^4.1.2",
     "esm": "^3.2.25",
     "lodash": "^4.17.21",
-    "prettier": "^2.4.1",
     "shelljs": "^0.8.4",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
